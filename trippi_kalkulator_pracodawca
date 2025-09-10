@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Benefitu Rowerowego</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            animation: fadeInUp 0.8s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .icon {
+            font-size: 1.5rem;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            color: #555;
+            font-weight: 500;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        input[type="number"], select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        input[type="number"]:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+        }
+
+        .input-with-unit {
+            position: relative;
+        }
+
+        .unit {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .result-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.95; }
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        .result-value {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        .highlight {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        .highlight-title {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .highlight-value {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .benefit-item {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            transition: background 0.3s ease;
+        }
+
+        .benefit-item:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .benefit-icon {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+
+        .benefit-label {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .benefit-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .info-tooltip {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            line-height: 20px;
+            font-size: 0.8rem;
+            cursor: help;
+            margin-left: 5px;
+        }
+
+        .button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .calculator-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚴 Kalkulator Benefitu Rowerowego</h1>
+            <p class="subtitle">Oblicz koszty, zwrot z inwestycji i wpływ na środowisko</p>
+        </header>
+
+        <div class="calculator-grid">
+            <!-- Karta danych wejściowych -->
+            <div class="card">
+                <h2 class="card-title">
+                    <span class="icon">📊</span>
+                    Dane wejściowe
+                </h2>
+                
+                <div class="input-group">
+                    <label for="employeeCount">
+                        Liczba pracowników korzystających z benefitu
+                        <span class="info-tooltip" title="Szacowana liczba pracowników, którzy będą korzystać z programu">?</span>
+                    </label>
+                    <input type="number" id="employeeCount" value="50" min="1" max="10000">
+                </div>
+
+                <div class="input-group">
+                    <label for="monthlyBenefit">
+                        Miesięczny benefit na pracownika
+                        <span class="info-tooltip" title="Kwota dofinansowania na rower/abonament">?</span>
+                    </label>
+                    <div class="input-with-unit">
+                        <input type="number" id="monthlyBenefit" value="200" min="0" max="1000" step="10">
+                        <span class="unit">PLN</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="benefitType">
+                        Typ benefitu
+                    </label>
+                    <select id="benefitType">
+                        <option value="purchase">Zakup roweru</option>
+                        <option value="subscription">Abonament rowerowy</option>
+                        <option value="mixed">Mieszany</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="avgDistance">
+                        Średnia dzienna odległość dojazdu (w jedną stronę)
+                        <span class="info-tooltip" title="Przeciętna odległość pokonywana przez pracownika">?</span>
+                    </label>
+                    <div class="input-with-unit">
+                        <input type="number" id="avgDistance" value="5" min="0.5" max="50" step="0.5">
+                        <span class="unit">km</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="workDays">
+                        Średnia liczba dni pracy w miesiącu
+                    </label>
+                    <input type="number" id="workDays" value="20" min="1" max="31">
+                </div>
+
+                <div class="input-group">
+                    <label for="bikeUsageRate">
+                        Szacowany % dni wykorzystania roweru
+                        <span class="info-tooltip" title="Uwzględnia pogodę, porę roku, etc.">?</span>
+                    </label>
+                    <div class="input-with-unit">
+                        <input type="number" id="bikeUsageRate" value="60" min="10" max="100" step="5">
+                        <span class="unit">%</span>
+                    </div>
+                </div>
+
+                <button class="button" onclick="calculateAll()">Przelicz wyniki</button>
+            </div>
+
+            <!-- Karta kosztów i ROI -->
+            <div class="card">
+                <h2 class="card-title">
+                    <span class="icon">💰</span>
+                    Koszty i zwrot z inwestycji
+                </h2>
+                
+                <div class="result-box">
+                    <div class="result-item">
+                        <span class="result-label">Koszt miesięczny na pracownika:</span>
+                        <span class="result-value" id="monthlyCostPerEmployee">200 PLN</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Całkowity koszt miesięczny:</span>
+                        <span class="result-value" id="totalMonthlyCost">10 000 PLN</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Całkowity koszt roczny:</span>
+                        <span class="result-value" id="totalYearlyCost">120 000 PLN</span>
+                    </div>
+                    
+                    <div class="highlight">
+                        <div class="highlight-title">📈 Szacowany zwrot z inwestycji (ROI)</div>
+                        <div class="highlight-value" id="roi">215%</div>
+                    </div>
+
+                    <div class="benefits-grid">
+                        <div class="benefit-item">
+                            <div class="benefit-icon">🏥</div>
+                            <div class="benefit-label">Redukcja L4</div>
+                            <div class="benefit-value" id="sickLeaveReduction">-25%</div>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-icon">⚡</div>
+                            <div class="benefit-label">Wzrost produktywności</div>
+                            <div class="benefit-value" id="productivityIncrease">+15%</div>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-icon">😊</div>
+                            <div class="benefit-label">Satysfakcja pracowników</div>
+                            <div class="benefit-value" id="satisfaction">+30%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Karta emisji CO2 -->
+            <div class="card">
+                <h2 class="card-title">
+                    <span class="icon">🌱</span>
+                    Redukcja emisji CO2
+                </h2>
+                
+                <div class="result-box">
+                    <div class="result-item">
+                        <span class="result-label">Dzienna redukcja na pracownika:</span>
+                        <span class="result-value" id="dailyCO2Reduction">1.2 kg</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Miesięczna redukcja na pracownika:</span>
+                        <span class="result-value" id="monthlyCO2Reduction">14.4 kg</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Roczna redukcja na pracownika:</span>
+                        <span class="result-value" id="yearlyCO2Reduction">173 kg</span>
+                    </div>
+                    
+                    <div class="highlight">
+                        <div class="highlight-title">🌍 Całkowita roczna redukcja CO2</div>
+                        <div class="highlight-value" id="totalYearlyCO2">8.6 ton</div>
+                    </div>
+
+                    <div class="benefits-grid">
+                        <div class="benefit-item">
+                            <div class="benefit-icon">🌳</div>
+                            <div class="benefit-label">Równoważne drzewom</div>
+                            <div class="benefit-value" id="treesEquivalent">430</div>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-icon">🚗</div>
+                            <div class="benefit-label">Km samochodem</div>
+                            <div class="benefit-value" id="carKmEquivalent">43 000</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Karta dodatkowych korzyści -->
+            <div class="card">
+                <h2 class="card-title">
+                    <span class="icon">🎯</span>
+                    Dodatkowe korzyści
+                </h2>
+                
+                <div class="result-box">
+                    <div class="result-item">
+                        <span class="result-label">Oszczędność na parkingach:</span>
+                        <span class="result-value" id="parkingSavings">2 500 PLN/msc</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Redukcja kosztów zdrowotnych:</span>
+                        <span class="result-value" id="healthSavings">1 800 PLN/msc</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Wartość PR/CSR:</span>
+                        <span class="result-value" id="prValue">Wysoka</span>
+                    </div>
+                    
+                    <div class="highlight">
+                        <div class="highlight-title">💼 Całkowite oszczędności miesięczne</div>
+                        <div class="highlight-value" id="totalMonthlySavings">4 300 PLN</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Stałe do obliczeń
+        const CO2_PER_KM_CAR = 0.12; // kg CO2 na km (średnia dla samochodu)
+        const CO2_PER_KM_BIKE = 0; // kg CO2 na km (rower)
+        const TREE_CO2_ABSORPTION = 20; // kg CO2 rocznie na drzewo
+        const SICK_LEAVE_REDUCTION = 0.25; // 25% redukcja zwolnień
+        const PRODUCTIVITY_INCREASE = 0.15; // 15% wzrost produktywności
+        const AVG_SICK_LEAVE_COST = 200; // PLN dziennie
+        const PARKING_COST_PER_EMPLOYEE = 50; // PLN miesięcznie
+        const HEALTH_COST_REDUCTION = 36; // PLN miesięcznie na pracownika
+
+        function calculateAll() {
+            // Pobierz dane wejściowe
+            const employeeCount = parseFloat(document.getElementById('employeeCount').value);
+            const monthlyBenefit = parseFloat(document.getElementById('monthlyBenefit').value);
+            const avgDistance = parseFloat(document.getElementById('avgDistance').value);
+            const workDays = parseFloat(document.getElementById('workDays').value);
+            const bikeUsageRate = parseFloat(document.getElementById('bikeUsageRate').value) / 100;
+
+            // Obliczenia kosztów
+            const monthlyCostPerEmployee = monthlyBenefit;
+            const totalMonthlyCost = monthlyCostPerEmployee * employeeCount;
+            const totalYearlyCost = totalMonthlyCost * 12;
+
+            // Obliczenia CO2
+            const dailyDistanceTotal = avgDistance * 2; // tam i z powrotem
+            const dailyCO2Saved = dailyDistanceTotal * CO2_PER_KM_CAR;
+            const effectiveDaysPerMonth = workDays * bikeUsageRate;
+            const monthlyCO2Saved = dailyCO2Saved * effectiveDaysPerMonth;
+            const yearlyCO2Saved = monthlyCO2Saved * 12;
+            const totalYearlyCO2Saved = yearlyCO2Saved * employeeCount / 1000; // w tonach
+
+            // Równoważniki
+            const treesEquivalent = Math.round((yearlyCO2Saved * employeeCount) / TREE_CO2_ABSORPTION);
+            const carKmEquivalent = Math.round((yearlyCO2Saved * employeeCount) / CO2_PER_KM_CAR);
+
+            // Oszczędności
+            const parkingSavings = Math.round(employeeCount * PARKING_COST_PER_EMPLOYEE * bikeUsageRate);
+            const healthSavings = Math.round(employeeCount * HEALTH_COST_REDUCTION * bikeUsageRate);
+            const totalMonthlySavings = parkingSavings + healthSavings;
+
+            // ROI (uproszczone)
+            const avgSickLeaveSavings = employeeCount * 2 * AVG_SICK_LEAVE_COST * SICK_LEAVE_REDUCTION * 12; // rocznie
+            const productivityValue = totalYearlyCost * PRODUCTIVITY_INCREASE; // szacunkowa wartość
+            const totalBenefits = avgSickLeaveSavings + productivityValue + (totalMonthlySavings * 12);
+            const roi = Math.round((totalBenefits / totalYearlyCost) * 100);
+
+            // Aktualizuj wyświetlane wartości
+            document.getElementById('monthlyCostPerEmployee').textContent = `${monthlyCostPerEmployee.toFixed(0)} PLN`;
+            document.getElementById('totalMonthlyCost').textContent = `${totalMonthlyCost.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, " ")} PLN`;
+            document.getElementById('totalYearlyCost').textContent = `${totalYearlyCost.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, " ")} PLN`;
+            document.getElementById('roi').textContent = `${roi}%`;
+
+            document.getElementById('dailyCO2Reduction').textContent = `${dailyCO2Saved.toFixed(1)} kg`;
+            document.getElementById('monthlyCO2Reduction').textContent = `${monthlyCO2Saved.toFixed(1)} kg`;
+            document.getElementById('yearlyCO2Reduction').textContent = `${yearlyCO2Saved.toFixed(0)} kg`;
+            document.getElementById('totalYearlyCO2').textContent = `${totalYearlyCO2Saved.toFixed(1)} ton`;
+
+            document.getElementById('treesEquivalent').textContent = treesEquivalent.toLocaleString('pl-PL');
+            document.getElementById('carKmEquivalent').textContent = carKmEquivalent.toLocaleString('pl-PL');
+
+            document.getElementById('parkingSavings').textContent = `${parkingSavings.toLocaleString('pl-PL')} PLN/msc`;
+            document.getElementById('healthSavings').textContent = `${healthSavings.toLocaleString('pl-PL')} PLN/msc`;
+            document.getElementById('totalMonthlySavings').textContent = `${totalMonthlySavings.toLocaleString('pl-PL')} PLN`;
+
+            // Animacja przy aktualizacji
+            document.querySelectorAll('.result-box').forEach(box => {
+                box.style.animation = 'none';
+                setTimeout(() => {
+                    box.style.animation = 'pulse 2s infinite';
+                }, 10);
+            });
+        }
+
+        // Automatyczne przeliczanie przy zmianie wartości
+        document.querySelectorAll('input, select').forEach(input => {
+            input.addEventListener('change', calculateAll);
+        });
+
+        // Początkowe obliczenie
+        calculateAll();
+    </script>
+</body>
+</html>

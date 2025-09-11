@@ -12,8 +12,8 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Poppins', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #764ba2 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
         }
@@ -122,15 +122,16 @@
 
         .unit {
             position: absolute;
-            right: 12px;
+            right: 30px;
             top: 50%;
             transform: translateY(-50%);
             color: #888;
             font-size: 0.85rem;
+            pointer-events: none;
         }
 
         .result-box {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #764ba2 0%, #764ba2 100%);
             color: white;
             padding: 20px;
             border-radius: 15px;
@@ -260,7 +261,7 @@
         }
 
         .button {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #764ba2 0%, #764ba2 100%);
             color: white;
             border: none;
             padding: 10px 25px;
@@ -322,7 +323,7 @@
                         Liczba pracowników
                         <span class="info-tooltip" title="Liczba pracowników korzystających z benefitu">?</span>
                     </label>
-                    <input type="number" id="employeeCount" value="50" min="1" max="10000">
+                    <input type="number" id="employeeCount" value="10" min="1" max="10000">
                 </div>
 
                 <div class="input-group">
@@ -331,7 +332,7 @@
                         <span class="info-tooltip" title="Kwota dofinansowania miesięcznego">?</span>
                     </label>
                     <div class="input-with-unit">
-                        <input type="number" id="monthlyBenefit" value="200" min="0" max="1000" step="10">
+                        <input type="number" id="monthlyBenefit" value="100" min="0" max="1000" step="10">
                         <span class="unit">PLN</span>
                     </div>
                 </div>
@@ -371,7 +372,7 @@
                         <span class="info-tooltip" title="% dni z rowerem">?</span>
                     </label>
                     <div class="input-with-unit">
-                        <input type="number" id="bikeUsageRate" value="60" min="10" max="100" step="5">
+                        <input type="number" id="bikeUsageRate" value="50" min="10" max="100" step="5">
                         <span class="unit">%</span>
                     </div>
                 </div>
@@ -467,8 +468,16 @@
                     <div class="benefits-grid">
                         <div class="benefit-item">
                             <svg class="benefit-icon" viewBox="0 0 24 24">
-                                <path d="M21.08,8.58C21.03,8.03 20.63,7.58 20.08,7.53C15.03,7 10,7 5.5,8.29C5,8.41 4.61,8.81 4.5,9.31C3.95,11.81 4,14.31 4.55,16.81C4.66,17.31 5.05,17.71 5.55,17.82C7.86,18.31 10.39,18.67 12.92,18.67A39.5,39.5 0 0,0 18.47,18.17C18.97,18.06 19.36,17.66 19.47,17.16C20,14.66 20.05,12.16 19.5,9.66A14.27,14.27 0 0,0 21.23,9.05C21.42,9 21.54,8.79 21.54,8.59V8.59C21.54,8.57 21.2,8.58 21.08,8.58M16.5,13L10.5,16V10L16.5,13Z"/>
-                            </svg>
+                                <path d="M12,1 C10,1 8,3 8,5 C6,5 4,7 4,9 C4,11 6,13 8,13 
+             C8,15 10,17 12,17 C14,17 16,15 16,13 C18,13 20,11 20,9 
+             C20,7 18,5 16,5 C16,3 14,1 12,1 Z" 
+          fill="white"/>
+    <!-- Pień -->
+    <rect x="10" y="17" width="4" height="5" fill="white"/>
+    <!-- Korzenie -->
+    <path d="M10,22 L8,24 M12,22 L12,24 M14,22 L16,24" 
+          stroke="white" stroke-width="0.5" fill="none"/>
+        </svg>
                             <div class="benefit-label">Równoważne drzewom</div>
                             <div class="benefit-value" id="treesEquivalent">430</div>
                         </div>
@@ -539,7 +548,46 @@
                 </div>
             </div>
         </div>
-        
+            <div style="background: rgba(255,255,255,0.1); border-radius: 15px; padding: 20px; margin-top: 30px; color: white; font-size: 0.75rem; line-height: 1.6; opacity: 0.85;">
+            <h3 style="font-size: 1rem; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 8px;">Metodologia obliczeń</h3>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                <div>
+                    <strong style="color: white;">Zwrot z inwestycji (ROI):</strong>
+                    <ul style="margin: 5px 0; padding-left: 20px;">
+                        <li>Redukcja zwolnień lekarskich: -25% (2 dni/rok/pracownik × 200 PLN/dzień)</li>
+                        <li>Wzrost produktywności: +15% wartości benefitu</li>
+                        <li>Oszczędności na parkingach: 50 PLN/pracownik/miesiąc</li>
+                        <li>Redukcja kosztów zdrowotnych: 36 PLN/pracownik/miesiąc</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <strong style="color: white;">Redukcja emisji CO2:</strong>
+                    <ul style="margin: 5px 0; padding-left: 20px;">
+                        <li>Emisja samochodu: 0.12 kg CO2/km (średnia dla aut osobowych)</li>
+                        <li>Emisja roweru: 0 kg CO2/km</li>
+                        <li>Absorpcja CO2 przez drzewo: 20 kg/rok</li>
+                        <li>Obliczenie: dystans dzienny × dni robocze × % wykorzystania × emisja</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <strong style="color: white;">Założenia bazowe:</strong>
+                    <ul style="margin: 5px 0; padding-left: 20px;">
+                        <li>Średnie spalanie: ~7L/100km (1L benzyny = 2.3 kg CO2)</li>
+                        <li>Koszty dnia na L4: 200 PLN (średnia krajowa)</li>
+                        <li>Dni robocze: uwzględnia święta i urlopy</li>
+                        <li>Model uproszczony, nie uwzględnia ulg podatkowych</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <p style="margin-top: 15px; font-size: 0.7rem; opacity: 0.7; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 10px;">
+                * Wartości bazują na danych statystycznych i badaniach dot. wpływu aktywności fizycznej na zdrowie pracowników. Rzeczywiste wyniki mogą się różnić w zależności od specyfiki organizacji.
+                Emisja CO2 dla samochodów waha się od 0.08-0.20 kg/km w zależności od typu pojazdu i warunków jazdy.
+            </p>
+        </div>
         <footer style="text-align: center; color: white; margin-top: 40px; padding: 20px; font-size: 0.9rem; opacity: 0.9;">
             <p style="margin: 0;">Opracował: Paweł Pupiń</p>
         </footer>
